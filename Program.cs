@@ -11,7 +11,12 @@ namespace Montecarlomethod
         static void Main(string[] args)
         {
             Console.Write("Expression >_");
-            Montecarlo montecarlo = new Montecarlo(Console.ReadLine(),0,10);
+            Montecarlo montecarlo = new Montecarlo(Console.ReadLine(),1,5);
+            while(true){
+                montecarlo.StartEmulate(100000);
+                Console.ReadKey();
+            }
+            
             Console.ReadKey();
         }
     }
