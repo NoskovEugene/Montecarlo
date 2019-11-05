@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+using System.Dynamic;
 using System;
 using System.Collections.Generic;
 using Analyzer;
@@ -59,7 +61,7 @@ namespace Montecarlomethod
                 }
                 this.Top = max;
                 this.S = (Right - Left) * Top;
-                Logger.Info($"S: {this.S}");
+                Logger.Info($"S:({this.Right} - {this.Left}) * {this.Top} {this.S}");
                 Logger.Info($"Maximum function founded. Is {max}");
 
             }
@@ -72,38 +74,41 @@ namespace Montecarlomethod
 
         public void StartEmulate(double N)
         {
+            Random rnd = new Random();
             Logger.Info($"Starting simulate with {N} steps");
-            double nInput = -1;
+            var l = DateTime.Now;
+            var nInput = 0;
             for (int i = 0; i < N; i++)
             {
-                Random rnd = new Random();
-                var generatedPoint = GeneratePoint();
+                var generatedPoint = GeneratePoint(rnd);
                 var calcPoint = new Point(){X = generatedPoint.X, Y = Calculator.Calc(ExpElements,generatedPoint.X)};
                 if(ComparePoint(generatedPoint,calcPoint)){
-                    if(nInput == -1) nInput = 0;
                     nInput++;
                 }
             }
+            var span = DateTime.Now - l;
+            Logger.Info($"Time spent: {span}");
             Logger.Info($"In points: {nInput}");
             Logger.Info($"All points: {N}");
-            double Integral = (nInput / N)*this.S;
-            Logger.Info($"Integral: {(nInput / N)*this.S}");
+            Logger.Info($"Percentage of hit points: {(nInput / N)*100}%");
+            double Integral = (nInput / N) * this.S;
+            Logger.Info($"Integral: {Integral}");
 
         }
 
         public bool ComparePoint(Point generatedPoint,Point CalcedPoint)
         {
-            if(generatedPoint.Y < CalcedPoint.Y){
+            if(generatedPoint.Y > 0 & generatedPoint.Y < CalcedPoint.Y){
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
 
-        private Point GeneratePoint(){
-            Random rnd = new Random();
-            return new Point(){X = rnd.Next(Left,Right), Y = rnd.Next(0,(int)Top)};
+        private Point GeneratePoint(Random rnd){
+            double y = (Top) * rnd.NextDouble();
+            double x = ((Right - Left) * rnd.NextDouble()) + Left;
+            return new Point(){X = x, Y = y};
         }
     }
 }

@@ -9,3 +9,14 @@ c:\Devop\Montecarlomethod\obj\Debug\netcoreapp3.0\Montecarlomethod.AssemblyInfoI
 c:\Devop\Montecarlomethod\obj\Debug\netcoreapp3.0\Montecarlomethod.AssemblyInfo.cs
 c:\Devop\Montecarlomethod\obj\Debug\netcoreapp3.0\Montecarlomethod.dll
 c:\Devop\Montecarlomethod\obj\Debug\netcoreapp3.0\Montecarlomethod.pdb
+c:\Devop\Montecarlo\bin\Debug\netcoreapp3.0\Montecarlomethod.exe
+C:\Devop\Montecarlo\bin\Debug\netcoreapp3.0\Montecarlomethod.deps.json
+C:\Devop\Montecarlo\bin\Debug\netcoreapp3.0\Montecarlomethod.runtimeconfig.json
+C:\Devop\Montecarlo\bin\Debug\netcoreapp3.0\Montecarlomethod.runtimeconfig.dev.json
+c:\Devop\Montecarlo\bin\Debug\netcoreapp3.0\Montecarlomethod.dll
+c:\Devop\Montecarlo\bin\Debug\netcoreapp3.0\Montecarlomethod.pdb
+c:\Devop\Montecarlo\obj\Debug\netcoreapp3.0\Montecarlomethod.csprojAssemblyReference.cache
+c:\Devop\Montecarlo\obj\Debug\netcoreapp3.0\Montecarlomethod.AssemblyInfoInputs.cache
+c:\Devop\Montecarlo\obj\Debug\netcoreapp3.0\Montecarlomethod.AssemblyInfo.cs
+c:\Devop\Montecarlo\obj\Debug\netcoreapp3.0\Montecarlomethod.dll
+c:\Devop\Montecarlo\obj\Debug\netcoreapp3.0\Montecarlomethod.pdb

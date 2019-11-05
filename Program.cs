@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Net;
+using System.Collections.Generic;
 using System;
 using Analyzer;
 using PolishNotation;
@@ -10,14 +11,24 @@ namespace Montecarlomethod
     {
         static void Main(string[] args)
         {
-            Console.Write("Expression >_");
-            Montecarlo montecarlo = new Montecarlo(Console.ReadLine(),1,5);
             while(true){
-                montecarlo.StartEmulate(100000);
-                Console.ReadKey();
+            Console.Write("Left: ");
+            if (int.TryParse(Console.ReadLine(), out int left))
+            {
+                Console.Write("Right: ");
+                if (int.TryParse(Console.ReadLine(), out int right))
+                {
+                    Console.Write("Steps: ");
+                    if (int.TryParse(Console.ReadLine(), out int steps))
+                    {
+                        Console.Write("Expression >_");
+                        Montecarlo montecarlo = new Montecarlo(Console.ReadLine(), left, right);
+                        montecarlo.StartEmulate(steps);
+                        Console.ReadKey();
+                    }
+                }
             }
-            
-            Console.ReadKey();
+            }
         }
     }
 }

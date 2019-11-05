@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Devop\\Montecarlomethod\\Montecarlomethod.csproj",
+      "projectUniqueName": "C:\\Devop\\Montecarlo\\Montecarlomethod.csproj",
       "projectName": "Montecarlomethod",
-      "projectPath": "C:\\Devop\\Montecarlomethod\\Montecarlomethod.csproj",
+      "projectPath": "C:\\Devop\\Montecarlo\\Montecarlomethod.csproj",
       "packagesPath": "C:\\Users\\user.ET123.000\\.nuget\\packages\\",
-      "outputPath": "C:\\Devop\\Montecarlomethod\\obj\\",
+      "outputPath": "C:\\Devop\\Montecarlo\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
