@@ -20,3 +20,5 @@ c:\Devop\Montecarlo\obj\Debug\netcoreapp3.0\Montecarlomethod.AssemblyInfoInputs.
 c:\Devop\Montecarlo\obj\Debug\netcoreapp3.0\Montecarlomethod.AssemblyInfo.cs
 c:\Devop\Montecarlo\obj\Debug\netcoreapp3.0\Montecarlomethod.dll
 c:\Devop\Montecarlo\obj\Debug\netcoreapp3.0\Montecarlomethod.pdb
+c:\Devop\Montecarlo\bin\Debug\netcoreapp3.0\AutoMapper.dll
+C:\Devop\Montecarlo\obj\Debug\netcoreapp3.0\Montecarlomethod.csproj.CopyComplete
