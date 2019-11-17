@@ -1,3 +1,6 @@
+using System.IO.IsolatedStorage;
+using System.Reflection.Metadata.Ecma335;
+using System.Text.RegularExpressions;
 using System.Linq;
 using System.Reflection;
 using System.Numerics;
@@ -8,6 +11,9 @@ using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using System;
 using AutoMapper;
+using Montecarlomethod.Repositories;
+using Montecarlomethod.Dto;
+
 namespace Montecarlomethod
 {
     public class Controller
@@ -19,12 +25,8 @@ namespace Montecarlomethod
         public string ConsoleParameter {get;set;}
         public delegate Message CommandDelegate(string parameter);
         public Dictionary<string,CommandDelegate> Commands {get;private set;} = new Dictionary<string, CommandDelegate>();
-        public Dictionary<string,Parameter> Parameters = new Dictionary<string, Parameter>()
-        {
-            {"expr",new Parameter("Expression",typeof(string),"")},
-            {"left", new Parameter("Left",typeof(int),-1)},
-            {"right",new Parameter("right",typeof(int),-1)}
-        };
+        
+        public ParameterRepository Parameters {get;private set;}
 
         public Controller()
         {
@@ -35,7 +37,14 @@ namespace Montecarlomethod
             this.Mapper = config.CreateMapper();
             #endregion
 
-
+            Parameters = new ParameterRepository(this.Mapper);
+            var msg = this.Parameters.Add(new Parameter(){ParameterName = "left",ParameterValue = 0,ParameterType = new TypeParameter(){NameType = "double",Type = typeof(double)}});
+            logger.ShowMessages(normalizer.Normalize(msg));
+            msg = this.Parameters.Add(new Parameter(){ParameterName = "right",ParameterValue = 0,ParameterType = new TypeParameter(){NameType = "double",Type = typeof(double)}});
+            logger.ShowMessages(normalizer.Normalize(msg));
+            msg = this.Parameters.Add(new Parameter(){ParameterName = "expr",ParameterValue = 0,ParameterType = new TypeParameter(){NameType = "string",Type = typeof(string)}});
+            logger.ShowMessages(normalizer.Normalize(msg));
+            
             Commands.Add("set",(parameter)=>Set(parameter));
             Commands.Add("get",(parameter)=>Get(parameter));
         }
@@ -54,58 +63,53 @@ namespace Montecarlomethod
             }
         }
 
+
+
         public Message Get(string parameter)
         {
-            if(!string.IsNullOrEmpty(parameter)){}
-            else{
-                parameter = this.Query("parameter");
-                if(Parameters.ContainsKey(parameter)){
-                    return new Message(TypeMessage.Message,Parameters[parameter].ParameterValue.ToString());
-                }
-                else{
-                    return new Message(TypeMessage.Error,"Parameter was not found");
-                }
+            if(!string.IsNullOrEmpty(parameter))
+            {
+                return Parameters.GetValue(parameter);
             }
-            return null;
+            else{
+                string paramname = Query("Parameter name");
+                return Parameters.GetValue(paramname);
+            }
         }
 
         public Message Set(string parameter)
         {
             if(!string.IsNullOrEmpty(parameter))
             { 
-
-                return new Message(TypeMessage.Message,"");
+                var tuple = NormalizeParameter(parameter);
+                return Parameters.Set(tuple.Item1,tuple.Item2);
             }
             else{
-                parameter = this.Query("parameter");
-                string value = "";
-                if(!parameter.Contains('=')){
-                    value = this.Query("value");             
-                }
-                else{
-                    string[] tmpArr = parameter.Split(new char[] { '='});
-                    parameter = tmpArr[0];
-                    value = tmpArr[1];
-                }
-                if(Parameters.ContainsKey(parameter))
-                {
-                    Type paramType = Parameters[parameter].ParameterType;
-                    try
-                    {
-                        Parameter target = Parameters[parameter];
-                        Parameters[parameter].ParameterValue = Mapper.Map(value,value.GetType(),target.ParameterType);
-                    }
-                    catch (System.Exception ex)
-                    {
-                        return new Message(TypeMessage.Error,$"Unknown error while mapping type\r\n{ex.Message}");
-                    }
-                    return new Message(TypeMessage.Info,$"Parameter changed\r\nNow {Parameters[parameter].ParameterName}={Parameters[parameter].ParameterValue}");
-                }
-                else{
-                    return new Message(TypeMessage.Error, "Parameter not found");
-                }
+                parameter = Query("Parameter");
+                var tuple = NormalizeParameter(parameter);
+                return Parameters.Set(tuple.Item1,tuple.Item2);
             }
         }
+        
+        #region set aux
+        public Tuple<string,string> NormalizeParameter(string parameter)
+        {
+            string value = "";
+            if(parameter.Contains('=')){
+                string[] tmp = parameter.Split('=',StringSplitOptions.RemoveEmptyEntries);
+                parameter = tmp[0];
+                value = tmp [1];
+                return new Tuple<string, string>(parameter,value);
+            }
+            else
+            {
+                value = Query("Value");
+                return new Tuple<string, string>(parameter,value);
+            }
+        }
+        
+        #endregion
+
 
         private string Query(string text = "")
         {
@@ -139,22 +143,6 @@ namespace Montecarlomethod
         Error,
         Info,
         Message
-    }
-
-    public class Parameter
-    {
-        public string ParameterName{get;set;}
-
-        public Type ParameterType{get;set;}
-
-        public object ParameterValue{get;set;}
-
-        public Parameter(string name,Type type,object value)
-        {
-            this.ParameterName = name;
-            this.ParameterType = type;
-            this.ParameterValue = value;
-        }
     }
 }
 
