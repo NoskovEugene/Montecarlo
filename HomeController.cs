@@ -25,7 +25,8 @@ namespace Montecarlomethod
         public string ConsoleParameter {get;set;}
         public delegate Message CommandDelegate(string parameter);
         public Dictionary<string,CommandDelegate> Commands {get;private set;} = new Dictionary<string, CommandDelegate>();
-        
+        public Montecarlo Montecarlo { get;private set;}
+
         public ParameterRepository Parameters {get;private set;}
 
         public Controller()
@@ -38,15 +39,19 @@ namespace Montecarlomethod
             #endregion
 
             Parameters = new ParameterRepository(this.Mapper);
-            var msg = this.Parameters.Add(new Parameter(){ParameterName = "left",ParameterValue = 0,ParameterType = new TypeParameter(){NameType = "double",Type = typeof(double)}});
+            var msg = this.Parameters.Add(new Parameter(){ParameterName = "left",ParameterValue = 0,ParameterType = new TypeParameter(){NameType = "int",Type = typeof(int)}});
             logger.ShowMessages(normalizer.Normalize(msg));
-            msg = this.Parameters.Add(new Parameter(){ParameterName = "right",ParameterValue = 0,ParameterType = new TypeParameter(){NameType = "double",Type = typeof(double)}});
+            msg = this.Parameters.Add(new Parameter(){ParameterName = "right",ParameterValue = 0,ParameterType = new TypeParameter(){NameType = "int",Type = typeof(int)}});
             logger.ShowMessages(normalizer.Normalize(msg));
             msg = this.Parameters.Add(new Parameter(){ParameterName = "expr",ParameterValue = 0,ParameterType = new TypeParameter(){NameType = "string",Type = typeof(string)}});
             logger.ShowMessages(normalizer.Normalize(msg));
-            
+            msg = this.Parameters.Add(new Parameter(){ParameterName = "steps",ParameterValue = 0,ParameterType = new TypeParameter(){NameType = "double",Type = typeof(double)}});
+            logger.ShowMessages(normalizer.Normalize(msg));
+
             Commands.Add("set",(parameter)=>Set(parameter));
             Commands.Add("get",(parameter)=>Get(parameter));
+            Commands.Add("monteinit",(parameter)=>InitMontecarloMethod(parameter));
+            Commands.Add("emulate",(parameter)=>Emulate(parameter));
         }
 
         public void Start()
@@ -63,6 +68,44 @@ namespace Montecarlomethod
             }
         }
 
+
+        public Message InitMontecarloMethod(string parameter)
+        {
+            var expr = this.Parameters.Get("expr");
+            if(expr == null && string.IsNullOrEmpty(expr.ParameterValue.ToString())){
+                return new Message(TypeMessage.Error,"Parameter expr was not found or not initialized");
+            }
+            var left = this.Parameters.Get("left");
+            if(left == null){
+                return new Message(TypeMessage.Error,"Parameter left was not found");
+            }
+            var right = this.Parameters.Get("right");
+            if(right == null){
+                return new  Message(TypeMessage.Error, "Parameter right was not found");
+            }
+
+            this.Montecarlo = new Montecarlo(expr.ParameterValue.ToString(),(int)left.ParameterValue,(int)right.ParameterValue);
+            return this.Montecarlo.Init();
+        }
+
+        public Message Emulate(string parameter)
+        {
+            if(this.Montecarlo == null){
+                return new Message(TypeMessage.Error,"Montecarlo not initialized");
+            }
+            if(parameter.Contains("-m")){
+                var parameters = parameter.Split(" ",StringSplitOptions.RemoveEmptyEntries);
+                if(parameters.Length > 3 && double.TryParse(parameters[2],out double quantity))
+                {
+                    var message="";
+                    for(int i = 0;i<quantity;i++){
+                        message = this.Montecarlo.Emulate(parameters[0]).Value + "\r\n";
+                    }
+                    return new Message(TypeMessage.Message,message);
+                }
+            }
+            return this.Montecarlo.Emulate(parameter);
+        }
 
 
         public Message Get(string parameter)
@@ -110,6 +153,7 @@ namespace Montecarlomethod
         
         #endregion
 
+        
 
         private string Query(string text = "")
         {

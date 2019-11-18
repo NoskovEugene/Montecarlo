@@ -36,22 +36,21 @@ namespace Montecarlomethod
             this.Analyzer = new _Analyzer();
             this.NotationWorker = new RevercePolishNotation();
             this.Calculator = new Calculator.Calculator();
-            this.Logger = new Logger();
-            Init();
         }
 
-        private void Init()
+        public Message Init()
         {
+            var message = "";
             try
             {
-                Logger.Info("Starting initialization");
-                Logger.Info("Analyze string expression");
+                message +="Starting initialization\r\n";
+                message +="Analyze string expression\r\n";
                 ExpElements = Analyzer.Analyze(Expression);
-                Logger.Info("Converting to reverse polish notation");
+                message +="Converting to reverse polish notation\r\n";
                 ExpElements = NotationWorker.GetNotation(ExpElements);
-                Logger.Info("Testing function");
-                Logger.Info($"F(1) = {Calculator.Calc(ExpElements,this.Left)}");
-                Logger.Info($"F(2) = {Calculator.Calc(ExpElements,this.Left + 1)}");
+                message +="Testing function";
+                message +=$"F(1) = {Calculator.Calc(ExpElements,this.Left)}\r\n";
+                message +=$"F(2) = {Calculator.Calc(ExpElements,this.Left + 1)}\r\n";
                 double max = -999999;
                 for(double i = Left; i < Right;i+=0.1){
                     double f = Calculator.Calc(ExpElements,i);
@@ -61,21 +60,39 @@ namespace Montecarlomethod
                 }
                 this.Top = max;
                 this.S = (Right - Left) * Top;
-                Logger.Info($"S:({this.Right} - {this.Left}) * {this.Top} {this.S}");
-                Logger.Info($"Maximum function founded. Is {max}");
-
+                message +=$"S:({this.Right} - {this.Left}) * {this.Top} {this.S}\r\n";
+                message +=$"Maximum function founded. Is {max}";
+                return new Message(TypeMessage.Message,message);
             }
             catch (Exception ex)
             {
-                Logger.Error(ex.Message);
+                return new Message(TypeMessage.Error,ex.Message);
             }
         }
 
-
-        public void StartEmulate(double N)
+        public Message Emulate(string parameter)
         {
+            if(double.TryParse(parameter,out double steps)){
+                try
+                {
+                    return new Message(TypeMessage.Message,StartEmulate(steps));
+                }
+                catch (Exception ex)
+                {
+                    return new Message(TypeMessage.Error,ex.Message);
+                }
+            }
+            else{
+                return new Message(TypeMessage.Error,"Error while converting types");
+            }
+            
+        }
+
+        public string StartEmulate(double N)
+        {
+            var message = "";
             Random rnd = new Random();
-            Logger.Info($"Starting simulate with {N} steps");
+            message +=$"Starting simulate with {N} steps\r\n";
             var l = DateTime.Now;
             var nInput = 0;
             for (int i = 0; i < N; i++)
@@ -87,13 +104,13 @@ namespace Montecarlomethod
                 }
             }
             var span = DateTime.Now - l;
-            Logger.Info($"Time spent: {span}");
-            Logger.Info($"In points: {nInput}");
-            Logger.Info($"All points: {N}");
-            Logger.Info($"Percentage of hit points: {(nInput / N)*100}%");
+            message +=$"Time spent: {span}\r\n";
+            message +=$"In points: {nInput}\r\n";
+            message +=$"All points: {N}\r\n";
+            message +=$"Percentage of hit points: {(nInput / N)*100}%\r\n";
             double Integral = (nInput / N) * this.S;
-            Logger.Info($"Integral: {Integral}");
-
+            message +=$"Integral: {Integral}\r\n";
+            return message;
         }
 
         public bool ComparePoint(Point generatedPoint,Point CalcedPoint)

@@ -23,7 +23,7 @@ namespace Montecarlomethod.Repositories
             if(Dict.ContainsKey(Name)){
                 return Dict[Name];
             }else{
-                throw new Exception("Parameter was not found");
+                return null;
             }
         }
 
@@ -60,7 +60,7 @@ namespace Montecarlomethod.Repositories
             else
             {
                 Dict.Add(parameter.ParameterName,parameter);
-                return new Message(TypeMessage.Info,"Parameter added");
+                return new Message(TypeMessage.Info,$"Parameter {parameter.ParameterName} added");
             }
         }
 

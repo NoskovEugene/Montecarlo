@@ -1,25 +1,30 @@
 {
   "format": 1,
   "restore": {
-    "/mnt/Media/Разработка/heherhe/Montecarlo/Montecarlomethod.csproj": {}
+    "C:\\Devop\\Montecarlo\\Montecarlomethod.csproj": {}
   },
   "projects": {
-    "/mnt/Media/Разработка/heherhe/Montecarlo/Montecarlomethod.csproj": {
+    "C:\\Devop\\Montecarlo\\Montecarlomethod.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/Media/Разработка/heherhe/Montecarlo/Montecarlomethod.csproj",
+        "projectUniqueName": "C:\\Devop\\Montecarlo\\Montecarlomethod.csproj",
         "projectName": "Montecarlomethod",
-        "projectPath": "/mnt/Media/Разработка/heherhe/Montecarlo/Montecarlomethod.csproj",
-        "packagesPath": "/home/walera/.nuget/packages/",
-        "outputPath": "/mnt/Media/Разработка/heherhe/Montecarlo/obj/",
+        "projectPath": "C:\\Devop\\Montecarlo\\Montecarlomethod.csproj",
+        "packagesPath": "C:\\Users\\user.ET123.000\\.nuget\\packages\\",
+        "outputPath": "C:\\Devop\\Montecarlo\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "/home/walera/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\user.ET123.000\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -56,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.0.100/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
